@@ -112,13 +112,13 @@ void SemanticIntegratorBase::setSemanticProbabilities() {
   // TODO(Toni): sanity checks, set as DCHECK_EQ.
   CHECK_NEAR(semantic_log_likelihood_.diagonal().sum(),
              kTotalNumberOfLabels * log_match_probability_,
-             100 * vxb::kFloatEpsilon);
+             1000 * vxb::kFloatEpsilon);
   CHECK_NEAR(
       semantic_log_likelihood_.sum(),
       kTotalNumberOfLabels * log_match_probability_ +
           std::pow(kTotalNumberOfLabels, 2) * log_non_match_probability_ -
           kTotalNumberOfLabels * log_non_match_probability_,
-      1000 * vxb::kFloatEpsilon);
+      10000 * vxb::kFloatEpsilon);
   // Set the likelihood row for unknown label to 0, so to avoid integrating
   // our knowledge that the voxel is unknown.
   // Log(0) is -inf.

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(kimera_semantics)
 
 find_package(catkin_simple REQUIRED)
+set ( CMAKE_BUILD_TYPE  Debug )
 
 catkin_simple()
 

@@ -23,7 +23,7 @@ static constexpr uint8_t kUnknownSemanticLabelId = 0u;
 // supports.
 // TODO(Toni): parametrize this, although that means it becomes unknown at
 // compile time...
-static constexpr size_t kTotalNumberOfLabels = 21;
+static constexpr size_t kTotalNumberOfLabels = 41;
 typedef vxb::FloatingPoint SemanticProbability;
 typedef Eigen::Matrix<SemanticProbability, kTotalNumberOfLabels, 1>
     SemanticProbabilities;
