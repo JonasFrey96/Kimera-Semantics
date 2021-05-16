@@ -6,7 +6,17 @@ find_package(catkin_simple REQUIRED)
 catkin_simple()
 
 add_definitions(-std=c++14 -Wall -Wextra)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set ( CMAKE_BUILD_TYPE  Debug )
+
+set(PROTO_DEFNS include/proto/semantic_map.porto)
+set(BASE_PATH "include/proto")
+set(PROTOBUF_COMPILE_PYTHON true)
+
+PROTOBUF_CATKIN_GENERATE_CPP2(${BASE_PATH} PROTO_SRCS PROTO_HDRS ${PROTO_DEFNS})
 
 cs_add_library(${PROJECT_NAME}
   include/kimera_semantics_ros/depth_map_to_pointcloud.h
@@ -18,8 +28,8 @@ cs_add_library(${PROJECT_NAME}
   src/semantic_simulation_server.cpp
   src/semantic_tsdf_server.cpp
   src/rosbag_data_provider.cpp
-  src/semantic_simulation_server.cpp
-  src/semantic_tsdf_server.cpp
+  include/proto/semantic_map.pb.h
+  include/proto/semantic_map.pb.cc
 )
 
 cs_add_executable(kimera_semantics_node

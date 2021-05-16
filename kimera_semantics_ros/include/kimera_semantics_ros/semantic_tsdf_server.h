@@ -55,6 +55,8 @@ class SemanticTsdfServer : public vxb::TsdfServer {
                      const vxb::TsdfIntegratorBase::Config& integrator_config,
                      const vxb::MeshIntegratorConfig& mesh_config);
 
+  void serializeVoxelLayer();
+
   virtual ~SemanticTsdfServer() = default;
 
  protected:

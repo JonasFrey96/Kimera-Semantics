@@ -44,6 +44,12 @@
 
 #include "kimera_semantics_ros/ros_params.h"
 
+#include "proto/semantic_map.pb.h"
+
+#include <string>
+#include <iostream>
+#include <fstream>
+
 namespace kimera {
 
 SemanticTsdfServer::SemanticTsdfServer(const ros::NodeHandle& nh,
@@ -75,7 +81,64 @@ SemanticTsdfServer::SemanticTsdfServer(
         semantic_config_,
         tsdf_map_->getTsdfLayerPtr(),
         semantic_layer_.get());
+
   CHECK(tsdf_integrator_);
+
 }
 
+void SemanticTsdfServer::serializeVoxelLayer() {
+  vxb::BlockIndex index;
+  vxb::BlockIndexList blocks;
+  semantic_layer_->getAllAllocatedBlocks(&blocks);
+
+  // Create an empty object
+  happly::PLYData plyOut;
+  std::fstream outfile;
+  outfile.open("/home/jonfrey/catkin_ws/src/Kimera-Interfacer/kimera_interfacer/mesh_results/serialized.data", std::fstream::out );
+
+  if (outfile.is_open()) {
+    SemanticMapProto semantic_map_proto;
+
+    for(auto it = blocks.begin(); it != blocks.end(); ++it) {
+      vxb::BlockIndex semantic_block_idx;
+      semantic_block_idx = *it;
+      vxb::Block<SemanticVoxel> & semantic_block = semantic_layer_->getBlockByIndex( semantic_block_idx );
+      vxb::GlobalIndex global_voxel_idx;
+
+      size_t num_voxels = semantic_block.num_voxels();
+      size_t voxel_per_side = semantic_block.voxels_per_side();
+      auto voxel_size = semantic_block.voxel_size();
+      // TODO: Jonas Frey make use of serialization of Protobuf using streams
+      auto semantic_block_proto = semantic_map_proto.add_semantic_blocks();
+      semantic_block_proto->set_voxel_size(  voxel_size );
+      semantic_block_proto->set_voxels_per_side( voxel_per_side );
+      auto origin_proto = semantic_block_proto->mutable_origin();
+      origin_proto->set_x( semantic_block.origin().x() );
+      origin_proto->set_y( semantic_block.origin().y() );
+      origin_proto->set_z( semantic_block.origin().z() );
+      for (size_t i = 0; i < num_voxels; i++) {
+        SemanticVoxel & sem_voxel = semantic_block.getVoxelByLinearIndex(i);
+        uint8_t label = sem_voxel.semantic_label;
+        if (label != 0){
+          auto semantic_voxel_proto = semantic_block_proto->add_semantic_voxels();
+          auto color_proto = semantic_voxel_proto->mutable_color();
+          color_proto->set_r( sem_voxel.color.r );
+          color_proto->set_g( sem_voxel.color.g );
+          color_proto->set_b( sem_voxel.color.b );
+          semantic_voxel_proto -> set_linear_index( i );
+          auto A = sem_voxel.semantic_priors;
+          for(int i=0; i<A.rows(); ++i){
+            auto value = A.row(i);
+            semantic_voxel_proto->add_semantic_labels( float(value[i,0]) );
+          }
+        }
+      }
+    }
+    auto res = voxblox::utils::writeProtoMsgToStream( semantic_map_proto, &outfile );
+    outfile.close();
+    std::cout << "Done writing to file for serialization" << std::endl;
+  } else {
+    std::cout << "Failed opening the file for serialization" << std::endl;
+  }
+}
 }  // Namespace kimera

@@ -78,7 +78,6 @@ class FastSemanticTsdfIntegrator : public vxb::TsdfIntegratorBase,
                                          const SemanticLabels& semantic_labels,
                                          const bool freespace_points,
                                          vxb::ThreadSafeIndex* index_getter);
-
   virtual void integratePointCloud(
       const vxb::Transformation& T_G_C,
       const vxb::Pointcloud& points_C,
