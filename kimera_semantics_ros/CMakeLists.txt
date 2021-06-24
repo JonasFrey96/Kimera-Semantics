@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(kimera_semantics_ros)
 
 find_package(catkin_simple REQUIRED)
-
+find_package(voxblox REQUIRED)
 catkin_simple()
 
 add_definitions(-std=c++14 -Wall -Wextra)
