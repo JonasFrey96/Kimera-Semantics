@@ -86,15 +86,14 @@ SemanticTsdfServer::SemanticTsdfServer(
 
 }
 
-void SemanticTsdfServer::serializeVoxelLayer() {
+void SemanticTsdfServer::serializeVoxelLayer( const std::string& file_path ) {
   vxb::BlockIndex index;
   vxb::BlockIndexList blocks;
   semantic_layer_->getAllAllocatedBlocks(&blocks);
 
   // Create an empty object
-  happly::PLYData plyOut;
   std::fstream outfile;
-  outfile.open("/home/jonfrey/catkin_ws/src/Kimera-Interfacer/kimera_interfacer/mesh_results/serialized.data", std::fstream::out );
+  outfile.open( file_path , std::fstream::out );
 
   if (outfile.is_open()) {
     SemanticMapProto semantic_map_proto;
