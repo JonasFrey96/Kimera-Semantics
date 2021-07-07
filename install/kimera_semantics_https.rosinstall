@@ -37,6 +37,7 @@
 - git:
     local-name: Kimera-Interfacer
     uri: https://github.com/JonasFrey96/Kimera-Interfacer.git
+    version: melodic
 - git:
     local-name: ros_perception
     uri: https://github.com/ros-perception/perception_pcl.git 
