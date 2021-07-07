@@ -5,9 +5,9 @@ find_package(catkin_simple REQUIRED)
 find_package(voxblox REQUIRED)
 catkin_simple()
 
-add_definitions(-std=c++14 -Wall -Wextra)
+add_definitions(-std=c++11 -Wall -Wextra)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set ( CMAKE_BUILD_TYPE  Debug )
