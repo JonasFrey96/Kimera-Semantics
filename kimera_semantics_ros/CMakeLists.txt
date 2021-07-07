@@ -3,6 +3,7 @@ project(kimera_semantics_ros)
 
 
 
+
 find_package(catkin_simple REQUIRED)
 find_package(voxblox REQUIRED)
 catkin_simple()
@@ -12,14 +13,16 @@ add_definitions(-std=c++14 -Wall -Wextra)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(PROTO_DEFNS include/proto/semantic_map.porto)
-set(BASE_PATH "include/proto")
-set(PROTOBUF_COMPILE_PYTHON true)
-PROTOBUF_CATKIN_GENERATE_CPP2(${BASE_PATH} PROTO_SRCS PROTO_HDRS ${PROTO_DEFNS})
-
+# set ( CMAKE_BUILD_TYPE  Debug )
 set( CMAKE_BUILD_TYPE  Release )
 set( CMAKE_CXX_FLAGS_RELEASE "-O3")
 
+set(PROTO_DEFNS include/proto/semantic_map.porto)
+set(BASE_PATH "include/proto")
+set(PROTOBUF_COMPILE_PYTHON true)
+
+
+PROTOBUF_CATKIN_GENERATE_CPP2(${BASE_PATH} PROTO_SRCS PROTO_HDRS ${PROTO_DEFNS})
 
 cs_add_library(${PROJECT_NAME}
   include/kimera_semantics_ros/depth_map_to_pointcloud.h
